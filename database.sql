@@ -4,8 +4,8 @@
 -- =============================================
 
 -- Create Database
-CREATE DATABASE IF NOT EXISTS reunify_db;
-USE reunify_db;
+CREATE DATABASE IF NOT EXISTS reunify;
+USE reunify;
 
 -- =============================================
 -- Table: departments
@@ -347,7 +347,7 @@ CREATE INDEX idx_claims_item ON claims(item_id, claim_status);
 -- Grant Permissions (Optional - Adjust as needed)
 -- =============================================
 -- CREATE USER 'reunify_user'@'localhost' IDENTIFIED BY 'your_password_here';
--- GRANT SELECT, INSERT, UPDATE, DELETE ON reunify_db.* TO 'reunify_user'@'localhost';
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON reunify.* TO 'reunify_user'@'localhost';
 -- FLUSH PRIVILEGES;
 
 -- =============================================

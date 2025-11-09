@@ -187,7 +187,7 @@ Reunify/
 
 3. **Create Database**
    - Open http://localhost/phpmyadmin
-   - Create database: `reunify_db`
+   - Create database: `reunify`
    - Import `database.sql`
 
 4. **Configure**

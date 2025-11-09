@@ -14,8 +14,8 @@
 ### Step 3: Create Database
 1. Open browser and go to: `http://localhost/phpmyadmin`
 2. Click "New" in left sidebar
-3. Create database named: `reunify_db`
-4. Click on `reunify_db` database
+3. Create database named: `reunify`
+4. Click on `reunify` database
 5. Click "Import" tab
 6. Click "Choose File" and select `database.sql` from your Reunify folder
 7. Click "Go" button at bottom
@@ -28,7 +28,7 @@
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');  // Empty for XAMPP default
-define('DB_NAME', 'reunify_db');
+define('DB_NAME', 'reunify');
 ```
 
 ### Step 5: Create Upload Folders

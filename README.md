@@ -116,7 +116,7 @@ cd reunify
 
 #### Option A: Using phpMyAdmin
 1. Open phpMyAdmin
-2. Create a new database named `reunify_db`
+2. Create a new database named `reunify`
 3. Import the `database.sql` file
 
 #### Option B: Using MySQL Command Line
@@ -124,8 +124,8 @@ cd reunify
 mysql -u root -p
 ```
 ```sql
-CREATE DATABASE reunify_db;
-USE reunify_db;
+CREATE DATABASE reunify;
+USE reunify;
 SOURCE /path/to/reunify/database.sql;
 ```
 
@@ -137,7 +137,7 @@ Edit `config/config.php` and update the database credentials:
 define('DB_HOST', 'localhost');
 define('DB_USER', 'your_username');
 define('DB_PASS', 'your_password');
-define('DB_NAME', 'reunify_db');
+define('DB_NAME', 'reunify');
 ```
 
 ### 4. Setup Upload Directory

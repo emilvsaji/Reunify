@@ -13,7 +13,7 @@ if (session_status() === PHP_SESSION_NONE) {
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
-define('DB_NAME', 'reunify_db');
+define('DB_NAME', 'reunify');
 
 // Application Configuration
 define('APP_NAME', 'Reunify');
