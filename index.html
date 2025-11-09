@@ -42,6 +42,12 @@
             font-size: 1.5rem;
             font-weight: 700;
             color: #2563eb;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-nav:hover {
+            transform: scale(1.05);
         }
 
         .nav-links {
@@ -434,14 +440,15 @@
 <body>
     <!-- Navigation -->
     <nav>
-        <div class="logo-nav">
+        <a href="index.html" class="logo-nav" style="text-decoration: none; cursor: pointer;">
             <i class="fas fa-search-location"></i>
             <span>Reunify</span>
-        </div>
+        </a>
         <div class="nav-links">
+            <a href="index.html">Home</a>
             <a href="#features">Features</a>
             <a href="#how-it-works">How It Works</a>
-            <a href="login.php">Login</a>
+            <a href="login.php" style="color: #4b5563; text-decoration: none; font-weight: 500; padding: 0.5rem 1rem;">Login</a>
             <a href="register.php" class="btn btn-primary" style="padding: 0.5rem 1.5rem;">Get Started</a>
         </div>
     </nav>

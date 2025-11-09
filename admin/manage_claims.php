@@ -58,7 +58,7 @@ while ($row = $counts->fetch_assoc()) {
 <body>
     <nav class="navbar">
         <div class="navbar-container">
-            <a href="../index.php" class="navbar-brand"><i class="fas fa-search-location"></i><span><?php echo APP_NAME; ?> - Admin</span></a>
+            <a href="../index.html" class="navbar-brand"><i class="fas fa-search-location"></i><span><?php echo APP_NAME; ?> - Admin</span></a>
             <ul class="navbar-menu">
                 <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                 <li><a href="manage_claims.php" class="active"><i class="fas fa-hand-paper"></i> Claims</a></li>

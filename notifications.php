@@ -32,7 +32,7 @@ $unread_count = getUnreadNotificationCount($_SESSION['user_id']);
 <body>
     <nav class="navbar">
         <div class="navbar-container">
-            <a href="index.php" class="navbar-brand"><i class="fas fa-search-location"></i><span><?php echo APP_NAME; ?></span></a>
+            <a href="index.html" class="navbar-brand"><i class="fas fa-search-location"></i><span><?php echo APP_NAME; ?></span></a>
             <ul class="navbar-menu">
                 <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                 <li><a href="notifications.php" class="active"><i class="fas fa-bell"></i> Notifications</a></li>

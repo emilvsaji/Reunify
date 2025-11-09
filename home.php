@@ -12,12 +12,12 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="navbar-container">
-            <a href="index.php" class="navbar-brand">
+            <a href="index.html" class="navbar-brand">
                 <i class="fas fa-search-location"></i>
                 <span><?php echo APP_NAME; ?></span>
             </a>
             <ul class="navbar-menu">
-                <li><a href="index.php" class="active"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="home.php" class="active"><i class="fas fa-home"></i> Home</a></li>
                 <li><a href="view_lost_items.php"><i class="fas fa-heart-broken"></i> Lost Items</a></li>
                 <li><a href="view_found_items.php"><i class="fas fa-hand-holding-heart"></i> Found Items</a></li>
                 <?php if (isLoggedIn()): ?>
@@ -56,9 +56,6 @@
                 <?php else: ?>
                     <a href="register.php" class="btn btn-lg btn-primary">
                         <i class="fas fa-user-plus"></i> Get Started
-                    </a>
-                    <a href="login.php" class="btn btn-lg btn-outline">
-                        <i class="fas fa-sign-in-alt"></i> Login
                     </a>
                 <?php endif; ?>
             </div>

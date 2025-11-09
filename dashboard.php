@@ -49,12 +49,12 @@ $notifications = $stmt->get_result();
     <!-- Navigation -->
     <nav class="navbar">
         <div class="navbar-container">
-            <a href="index.php" class="navbar-brand">
+            <a href="index.html" class="navbar-brand">
                 <i class="fas fa-search-location"></i>
                 <span><?php echo APP_NAME; ?></span>
             </a>
             <ul class="navbar-menu">
-                <li><a href="index.php"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="home.php"><i class="fas fa-home"></i> Home</a></li>
                 <li><a href="dashboard.php" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                 <li><a href="report_lost.php"><i class="fas fa-exclamation-circle"></i> Report Lost</a></li>
                 <li><a href="report_found.php"><i class="fas fa-check-circle"></i> Report Found</a></li>

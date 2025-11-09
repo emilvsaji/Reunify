@@ -57,9 +57,9 @@ $categories = $db->query("SELECT * FROM categories WHERE is_active = 1 ORDER BY 
 <body>
     <nav class="navbar">
         <div class="navbar-container">
-            <a href="index.php" class="navbar-brand"><i class="fas fa-search-location"></i><span><?php echo APP_NAME; ?></span></a>
+            <a href="index.html" class="navbar-brand"><i class="fas fa-search-location"></i><span><?php echo APP_NAME; ?></span></a>
             <ul class="navbar-menu">
-                <li><a href="index.php"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="home.php"><i class="fas fa-home"></i> Home</a></li>
                 <li><a href="view_lost_items.php"><i class="fas fa-heart-broken"></i> Lost Items</a></li>
                 <li><a href="view_found_items.php" class="active"><i class="fas fa-hand-holding-heart"></i> Found Items</a></li>
                 <?php if (isLoggedIn()): ?>
