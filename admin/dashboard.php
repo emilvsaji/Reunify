@@ -69,7 +69,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             <a href="../index.html" class="navbar-brand"><i class="fas fa-search-location"></i><span><?php echo APP_NAME; ?> - Admin</span></a>
             <ul class="navbar-menu">
                 <li><a href="dashboard.php" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="../index.php"><i class="fas fa-home"></i> Main Site</a></li>
+                <li><a href="manage_claims.php"><i class="fas fa-tasks"></i> Manage Claims</a></li>
+                <li><a href="feedback_analytics.php"><i class="fas fa-comments"></i> Feedback Analytics</a></li>
+                <li><a href="../index.html"><i class="fas fa-home"></i> Main Site</a></li>
                 <li><a href="../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
         </div>
@@ -158,15 +160,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 </a>
                 <a href="manage_users.php" class="btn btn-secondary">
                     <i class="fas fa-users"></i> Manage Users
-                </a>
-                <a href="manage_categories.php" class="btn btn-info">
-                    <i class="fas fa-tags"></i> Manage Categories
-                </a>
-                <a href="analytics.php" class="btn btn-outline">
-                    <i class="fas fa-chart-bar"></i> View Analytics
-                </a>
-                <a href="activity_logs.php" class="btn btn-outline">
-                    <i class="fas fa-history"></i> Activity Logs
                 </a>
             </div>
         </div>

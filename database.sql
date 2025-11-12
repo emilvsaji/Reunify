@@ -1,7 +1,4 @@
--- =============================================
--- Reunify - Lost & Found Application Database
--- Created: November 9, 2025
--- =============================================
+
 
 -- Create Database
 CREATE DATABASE IF NOT EXISTS reunify;
@@ -93,6 +90,9 @@ CREATE TABLE IF NOT EXISTS claims (
     item_id INT NOT NULL,
     claimed_by INT NOT NULL,
     claim_description TEXT NOT NULL,
+    claimer_name VARCHAR(100),
+    claimer_phone VARCHAR(20),
+    claimer_email VARCHAR(100),
     proof_image VARCHAR(255),
     identification_proof VARCHAR(255),
     claim_status ENUM('pending', 'under_review', 'approved', 'rejected', 'completed') DEFAULT 'pending',
@@ -158,6 +158,32 @@ CREATE TABLE IF NOT EXISTS messages (
     FOREIGN KEY (item_id) REFERENCES items(item_id) ON DELETE SET NULL,
     INDEX idx_conversation (sender_id, receiver_id),
     INDEX idx_unread (receiver_id, is_read)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =============================================
+-- Table: feedback
+-- =============================================
+CREATE TABLE IF NOT EXISTS feedback (
+    feedback_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    category ENUM('application', 'features', 'performance', 'user_experience', 'documentation', 'other') NOT NULL DEFAULT 'other',
+    rating INT NOT NULL CHECK (rating >= 1 AND rating <= 5),
+    subject VARCHAR(200) NOT NULL,
+    feedback_text TEXT NOT NULL,
+    status ENUM('new', 'reviewed', 'in_progress', 'resolved') DEFAULT 'new',
+    reviewed_by INT,
+    admin_response TEXT,
+    faculty_response TEXT,
+    is_anonymous TINYINT(1) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (student_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (reviewed_by) REFERENCES users(user_id) ON DELETE SET NULL,
+    INDEX idx_student (student_id),
+    INDEX idx_status (status),
+    INDEX idx_category (category),
+    INDEX idx_rating (rating),
+    INDEX idx_created (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- =============================================

@@ -4,7 +4,7 @@ $db = getDB();
 $item_id = intval($_GET['id'] ?? 0);
 
 if (!$item_id) {
-    header('Location: index.php');
+    header('Location: index.html');
     exit();
 }
 
@@ -21,7 +21,7 @@ $stmt->execute();
 $item = $stmt->get_result()->fetch_assoc();
 
 if (!$item) {
-    header('Location: index.php');
+    header('Location: index.html');
     exit();
 }
 
@@ -29,7 +29,7 @@ if (!$item) {
 $db->query("UPDATE items SET views_count = views_count + 1 WHERE item_id = $item_id");
 
 // Get existing claims for this item
-$claims_query = "SELECT c.*, u.full_name as claimer_name FROM claims c JOIN users u ON c.claimed_by = u.user_id WHERE c.item_id = ? ORDER BY c.claimed_at DESC";
+$claims_query = "SELECT c.*, u.full_name as user_full_name, u.phone as user_phone, u.email as user_email FROM claims c JOIN users u ON c.claimed_by = u.user_id WHERE c.item_id = ? ORDER BY c.claimed_at DESC";
 $stmt = $db->prepare($claims_query);
 $stmt->bind_param("i", $item_id);
 $stmt->execute();
@@ -154,24 +154,61 @@ if (isLoggedIn()) {
                             <h3><i class="fas fa-hand-paper"></i> Claims on This Item (<?php echo $claims->num_rows; ?>)</h3>
                         </div>
                         <?php while ($claim = $claims->fetch_assoc()): ?>
-                            <div style="padding: 1rem; background: var(--gray-100); border-radius: var(--border-radius); margin-bottom: 1rem;">
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <h4><?php echo htmlspecialchars($claim['claimer_name']); ?></h4>
-                                    <?php
-                                    $claim_badges = [
-                                        'pending' => 'badge-warning',
-                                        'under_review' => 'badge-info',
-                                        'approved' => 'badge-success',
-                                        'rejected' => 'badge-danger',
-                                        'completed' => 'badge-success'
-                                    ];
-                                    ?>
-                                    <span class="badge <?php echo $claim_badges[$claim['claim_status']]; ?>">
-                                        <?php echo strtoupper($claim['claim_status']); ?>
-                                    </span>
+                            <div style="padding: 1.5rem; background: var(--gray-100); border-radius: var(--border-radius); margin-bottom: 1.5rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                                    <div>
+                                        <h4 style="margin: 0 0 0.5rem 0;"><?php echo htmlspecialchars($claim['claimer_name'] ?? $claim['user_full_name']); ?></h4>
+                                        <?php
+                                        $claim_badges = [
+                                            'pending' => 'badge-warning',
+                                            'under_review' => 'badge-info',
+                                            'approved' => 'badge-success',
+                                            'rejected' => 'badge-danger',
+                                            'completed' => 'badge-success'
+                                        ];
+                                        ?>
+                                        <span class="badge <?php echo $claim_badges[$claim['claim_status']]; ?>">
+                                            <?php echo strtoupper($claim['claim_status']); ?>
+                                        </span>
+                                    </div>
                                 </div>
-                                <p style="margin: 0.5rem 0;"><?php echo htmlspecialchars($claim['claim_description']); ?></p>
-                                <small style="color: var(--gray-500);">Claimed <?php echo timeAgo($claim['claimed_at']); ?></small>
+                                
+                                <!-- Claimer Details -->
+                                <div style="background: white; padding: 1rem; border-radius: var(--border-radius); margin-bottom: 1rem;">
+                                    <h5 style="margin: 0 0 0.75rem 0; color: var(--primary-color);"><i class="fas fa-user-circle"></i> Claimer Details</h5>
+                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0.75rem;">
+                                        <div>
+                                            <strong><i class="fas fa-user"></i> Full Name:</strong><br>
+                                            <span style="color: var(--gray-700);"><?php echo htmlspecialchars($claim['claimer_name'] ?? '-'); ?></span>
+                                        </div>
+                                        <div>
+                                            <strong><i class="fas fa-phone"></i> Phone:</strong><br>
+                                            <span style="color: var(--gray-700);"><?php echo htmlspecialchars($claim['claimer_phone'] ?? '-'); ?></span>
+                                        </div>
+                                        <div>
+                                            <strong><i class="fas fa-envelope"></i> Email:</strong><br>
+                                            <span style="color: var(--gray-700);"><?php echo htmlspecialchars($claim['claimer_email'] ?? '-'); ?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Claim Description -->
+                                <div>
+                                    <h5 style="margin: 0 0 0.5rem 0; color: var(--primary-color);"><i class="fas fa-comment"></i> Why is this item yours?</h5>
+                                    <p style="margin: 0.5rem 0; color: var(--gray-700); line-height: 1.6; white-space: pre-wrap;"><?php echo htmlspecialchars($claim['claim_description']); ?></p>
+                                </div>
+                                
+                                <!-- Proof Image if available -->
+                                <?php if ($claim['proof_image']): ?>
+                                    <div style="margin-top: 1rem;">
+                                        <h5 style="margin: 0 0 0.5rem 0; color: var(--primary-color);"><i class="fas fa-image"></i> Proof Image</h5>
+                                        <img src="uploads/<?php echo htmlspecialchars($claim['proof_image']); ?>" 
+                                             alt="Proof" 
+                                             style="max-width: 300px; max-height: 300px; border-radius: var(--border-radius); border: 1px solid var(--gray-300);">
+                                    </div>
+                                <?php endif; ?>
+                                
+                                <small style="color: var(--gray-500); display: block; margin-top: 1rem;">Claimed <?php echo timeAgo($claim['claimed_at']); ?></small>
                             </div>
                         <?php endwhile; ?>
                     </div>

@@ -166,7 +166,7 @@
                 <p style="color: #10B981; font-weight: bold; margin-top: 1rem;">
                     🎉 Your system is ready! All critical checks passed.
                 </p>
-                <a href="index.php" class="btn">Go to Application →</a>
+                <a href="index.html" class="btn">Go to Application →</a>
             <?php else: ?>
                 <p style="color: #EF4444; font-weight: bold; margin-top: 1rem;">
                     ⚠ Please fix the errors above before using the application.

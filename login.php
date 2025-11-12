@@ -112,12 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             <div class="auth-footer">
                 <p>Don't have an account? <a href="register.php">Register here</a></p>
-                <p><a href="index.php">← Back to Home</a></p>
-            </div>
-            
-            <div class="demo-credentials">
-                <h4><i class="fas fa-info-circle"></i> Demo Credentials</h4>
-                <p><strong>Admin:</strong> admin@reunify.com / admin123</p>
+                <p><a href="index.html">← Back to Home</a></p>
             </div>
         </div>
     </div>

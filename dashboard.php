@@ -59,6 +59,7 @@ $notifications = $stmt->get_result();
                 <li><a href="report_lost.php"><i class="fas fa-exclamation-circle"></i> Report Lost</a></li>
                 <li><a href="report_found.php"><i class="fas fa-check-circle"></i> Report Found</a></li>
                 <li><a href="view_lost_items.php"><i class="fas fa-search"></i> Browse Items</a></li>
+                <li><a href="feedback.php"><i class="fas fa-comment-dots"></i> Feedback</a></li>
                 <li><a href="notifications.php" class="notification-badge">
                     <i class="fas fa-bell"></i>
                     <?php 

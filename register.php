@@ -209,7 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             <div class="auth-footer">
                 <p>Already have an account? <a href="login.php">Login here</a></p>
-                <p><a href="index.php">← Back to Home</a></p>
+                <p><a href="index.html">← Back to Home</a></p>
             </div>
         </div>
     </div>

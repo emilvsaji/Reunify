@@ -10,45 +10,50 @@ $date_to = sanitize($_GET['date_to'] ?? '');
 $page = max(1, intval($_GET['page'] ?? 1));
 $offset = ($page - 1) * ITEMS_PER_PAGE;
 
-// Build query
-$where = ["item_type = 'lost'", "status IN ('approved', 'matched')"];
+// Build query with proper parameter handling
+$where = ["i.item_type = 'lost'", "i.status IN ('approved', 'matched')"];
 $params = [];
 $types = '';
 
 if ($search) {
-    $where[] = "(title LIKE ? OR description LIKE ? OR location LIKE ?)";
+    $where[] = "(i.title LIKE ? OR i.description LIKE ? OR i.location LIKE ?)";
     $search_param = "%$search%";
-    $params[] = &$search_param;
-    $params[] = &$search_param;
-    $params[] = &$search_param;
+    $params[] = $search_param;
+    $params[] = $search_param;
+    $params[] = $search_param;
     $types .= 'sss';
 }
 
 if ($category) {
-    $where[] = "category_id = ?";
-    $params[] = &$category;
+    $where[] = "i.category_id = ?";
+    $params[] = $category;
     $types .= 'i';
 }
 
 if ($date_from) {
-    $where[] = "date_lost_found >= ?";
-    $params[] = &$date_from;
+    $where[] = "i.date_lost_found >= ?";
+    $params[] = $date_from;
     $types .= 's';
 }
 
 if ($date_to) {
-    $where[] = "date_lost_found <= ?";
-    $params[] = &$date_to;
+    $where[] = "i.date_lost_found <= ?";
+    $params[] = $date_to;
     $types .= 's';
 }
 
 $where_clause = implode(' AND ', $where);
 
 // Get total count
-$count_query = "SELECT COUNT(*) as total FROM items WHERE $where_clause";
+$count_query = "SELECT COUNT(*) as total FROM items i WHERE $where_clause";
 $count_stmt = $db->prepare($count_query);
 if ($params) {
-    $count_stmt->bind_param($types, ...$params);
+    // Build references for bind_param
+    $refs = [];
+    foreach ($params as &$param) {
+        $refs[] = &$param;
+    }
+    call_user_func_array([$count_stmt, 'bind_param'], array_merge([$types], $refs));
 }
 $count_stmt->execute();
 $total_items = $count_stmt->get_result()->fetch_assoc()['total'];
@@ -64,13 +69,17 @@ $query = "SELECT i.*, c.category_name, u.full_name as reporter_name
           LIMIT ? OFFSET ?";
 $stmt = $db->prepare($query);
 $limit = ITEMS_PER_PAGE;
-$new_params = $params;
-$new_params[] = &$limit;
-$new_params[] = &$offset;
-$new_types = $types . 'ii';
-if ($new_params) {
-    $stmt->bind_param($new_types, ...$new_params);
+$params[] = $limit;
+$params[] = $offset;
+$types .= 'ii';
+
+// Build references for bind_param
+$refs = [];
+foreach ($params as &$param) {
+    $refs[] = &$param;
 }
+call_user_func_array([$stmt, 'bind_param'], array_merge([$types], $refs));
+
 $stmt->execute();
 $items = $stmt->get_result();
 

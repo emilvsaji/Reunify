@@ -6,7 +6,7 @@ $item_id = intval($_GET['id'] ?? 0);
 $db = getDB();
 
 if (!$item_id) {
-    header('Location: index.php');
+    header('Location: index.html');
     exit();
 }
 
@@ -31,12 +31,30 @@ if ($check->num_rows > 0) {
     exit();
 }
 
+// Get current user details
+$user_query = "SELECT full_name, phone, email FROM users WHERE user_id = ?";
+$stmt = $db->prepare($user_query);
+$stmt->bind_param("i", $_SESSION['user_id']);
+$stmt->execute();
+$user = $stmt->get_result()->fetch_assoc();
+
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCSRFToken($_POST['csrf_token'] ?? '')) {
     $claim_description = sanitize($_POST['claim_description'] ?? '');
+    $claimer_name = sanitize($_POST['claimer_name'] ?? '');
+    $claimer_phone = sanitize($_POST['claimer_phone'] ?? '');
+    $claimer_email = sanitize($_POST['claimer_email'] ?? '');
     
     if (empty($claim_description)) {
         $error = 'Please provide details about why this item is yours';
+    } elseif (empty($claimer_name)) {
+        $error = 'Please provide your full name';
+    } elseif (empty($claimer_phone)) {
+        $error = 'Please provide your phone number';
+    } elseif (empty($claimer_email)) {
+        $error = 'Please provide your email address';
+    } elseif (!filter_var($claimer_email, FILTER_VALIDATE_EMAIL)) {
+        $error = 'Please provide a valid email address';
     } else {
         // Handle proof image upload
         $proof_image = '';
@@ -47,12 +65,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCSRFToken($_POST['csrf_token'
             }
         }
         
-        // Insert claim
-        $insert_query = "INSERT INTO claims (item_id, claimed_by, claim_description, proof_image, claim_status) VALUES (?, ?, ?, ?, 'pending')";
+        // Insert claim with claimer details
+        $insert_query = "INSERT INTO claims (item_id, claimed_by, claim_description, claimer_name, claimer_phone, claimer_email, proof_image, claim_status) VALUES (?, ?, ?, ?, ?, ?, ?, 'pending')";
         $stmt = $db->prepare($insert_query);
-        $stmt->bind_param("iiss", $item_id, $_SESSION['user_id'], $claim_description, $proof_image);
+        $stmt->bind_param("iisssss", $item_id, $_SESSION['user_id'], $claim_description, $claimer_name, $claimer_phone, $claimer_email, $proof_image);
         
         if ($stmt->execute()) {
+            // Update user profile with new contact info if provided
+            $update_query = "UPDATE users SET full_name = ?, phone = ?, email = ? WHERE user_id = ?";
+            $stmt = $db->prepare($update_query);
+            $stmt->bind_param("sssi", $claimer_name, $claimer_phone, $claimer_email, $_SESSION['user_id']);
+            $stmt->execute();
+            
             logActivity($_SESSION['user_id'], 'claim_item', "Claimed item: {$item['title']}");
             setSuccessMessage('Claim submitted successfully! The item owner will review your claim.');
             header('Location: claim_status.php');
@@ -115,9 +139,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCSRFToken($_POST['csrf_token'
             <form method="POST" action="" enctype="multipart/form-data">
                 <input type="hidden" name="csrf_token" value="<?php echo generateCSRFToken(); ?>">
                 
+                <!-- Claimer Details Section -->
+                <div style="background: var(--gray-100); padding: 1.5rem; border-radius: var(--border-radius); margin-bottom: 1.5rem;">
+                    <h3 style="margin-top: 0; color: var(--primary-color);"><i class="fas fa-user-check"></i> Your Details</h3>
+                    <p style="color: var(--gray-600);">Please provide your information so the item owner can contact you</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+                        <div class="form-group">
+                            <label for="claimer_name">
+                                <i class="fas fa-user"></i> Full Name *
+                            </label>
+                            <input type="text" id="claimer_name" name="claimer_name" required
+                                   value="<?php echo htmlspecialchars($user['full_name'] ?? ''); ?>"
+                                   placeholder="Enter your full name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="claimer_phone">
+                                <i class="fas fa-phone"></i> Phone Number *
+                            </label>
+                            <input type="tel" id="claimer_phone" name="claimer_phone" required
+                                   value="<?php echo htmlspecialchars($user['phone'] ?? ''); ?>"
+                                   placeholder="Enter your phone number">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="claimer_email">
+                                <i class="fas fa-envelope"></i> Email Address *
+                            </label>
+                            <input type="email" id="claimer_email" name="claimer_email" required
+                                   value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>"
+                                   placeholder="Enter your email address">
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="form-group">
                     <label for="claim_description">
-                        <i class="fas fa-comment"></i> Why is this item yours? *
+                        <i class="fas fa-comment"></i> Where do you get this from ? *
                     </label>
                     <textarea id="claim_description" name="claim_description" required rows="6"
                               placeholder="Provide specific details: unique features, where/when you lost it, what's inside it, serial numbers, etc."></textarea>
