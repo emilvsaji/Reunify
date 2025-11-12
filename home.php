@@ -483,6 +483,12 @@
                             <span class="badge"><?php echo $unread; ?></span>
                         <?php endif; ?>
                     </a></li>
+                    <?php if (hasRole('admin')): ?>
+                        <li><a href="admin/dashboard.php"><i class="fas fa-user-shield"></i> Admin</a></li>
+                    <?php endif; ?>
+                    <?php if (hasRole('faculty')): ?>
+                        <li><a href="feedback_analytics.php"><i class="fas fa-chart-line"></i> Feedback</a></li>
+                    <?php endif; ?>
                     <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 <?php else: ?>
                     <li><a href="login.php"><i class="fas fa-sign-in-alt"></i> Login</a></li>

@@ -1,8 +1,8 @@
 <?php
 require_once 'config/config.php';
 
-// Check if user is logged in and is admin
-if (!isLoggedIn() || $_SESSION['user_role'] !== 'admin') {
+// Check if user is logged in and is admin or faculty
+if (!isLoggedIn() || !in_array($_SESSION['user_role'], ['admin', 'faculty'])) {
     header('Location: login.php');
     exit();
 }
@@ -23,8 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         } elseif (!in_array($status, ['new', 'reviewed', 'in_progress', 'resolved'])) {
             $error = 'Invalid status';
         } else {
-            // Update feedback with faculty response
-            $query = "UPDATE feedback SET faculty_response = ?, status = ?, reviewed_by = ? WHERE feedback_id = ?";
+            // Update feedback with response based on user role
+            $field_name = ($_SESSION['user_role'] === 'admin') ? 'admin_response' : 'faculty_response';
+            $query = "UPDATE feedback SET $field_name = ?, status = ?, reviewed_by = ? WHERE feedback_id = ?";
             $stmt = $db->prepare($query);
             
             if ($stmt) {

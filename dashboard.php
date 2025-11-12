@@ -72,6 +72,9 @@ $notifications = $stmt->get_result();
                 <?php if (hasRole('admin')): ?>
                     <li><a href="admin/dashboard.php"><i class="fas fa-user-shield"></i> Admin</a></li>
                 <?php endif; ?>
+                <?php if (hasRole('faculty')): ?>
+                    <li><a href="feedback_analytics.php"><i class="fas fa-chart-line"></i> View Feedback</a></li>
+                <?php endif; ?>
                 <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
         </div>

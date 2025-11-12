@@ -1,8 +1,8 @@
 <?php
 require_once '../config/config.php';
 
-// Check if user is logged in and is admin
-if (!isLoggedIn() || $_SESSION['user_role'] !== 'admin') {
+// Check if user is logged in and is admin or faculty
+if (!isLoggedIn() || !in_array($_SESSION['user_role'], ['admin', 'faculty'])) {
     http_response_code(403);
     exit('Access denied');
 }
